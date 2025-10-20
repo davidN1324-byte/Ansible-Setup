@@ -1,0 +1,20 @@
+---
+- name: Istall Prometheus
+  apt:
+    name: prometheus
+    state: present
+    update_cache: yes
+
+- name: Copy configuration Prometheus
+  copy:
+    src: prometheus.yml
+    dest: /etc/prometheus/prometheus.yml
+    owner: prometheus
+    group: prometheus
+    mode: '0644'
+
+- name: restarted Prometheus
+  service:
+    name: prometheus
+    state: restarted
+    enabled: true
