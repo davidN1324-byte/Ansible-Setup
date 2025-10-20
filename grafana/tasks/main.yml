@@ -1,0 +1,37 @@
+---
+- name: Install dependencies
+  apt:
+    name:
+      - apt-transport-https
+      - software-properties-common
+      - gnupg
+      - curl
+    state: present
+    update_cache: yes
+
+- name: Add Grafana's GPG key
+  ansible.builtin.shell: |
+    curl -fsSL https://apt.grafana.com/gpg.key | gpg --dearmor -o /usr/share/keyrings/grafana.gpg
+  args:
+    creates: /usr/share/keyrings/grafana.gpg
+
+- name: Adding the Grafana repository
+  copy:
+    dest: /etc/apt/sources.list.d/grafana.list
+    content: |
+      deb [signed-by=/usr/share/keyrings/grafana.gpg] https://apt.grafana.com stable main
+
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+- name: Install Grafana
+  apt:
+    name: grafana
+    state: present
+
+- name: Launch and enable Grafana
+  systemd:
+    name: grafana-server
+    enabled: yes
+    state: started
