@@ -1,0 +1,25 @@
+---
+- name: Install ufw
+  apt:
+    name: ufw
+    state: present
+
+- name: Allow TCP-port
+  ufw:
+    rule: allow
+    port: "{{ item.port }}"
+    proto: "{{ item.proto }}"
+  loop:
+    - { port: 22, proto: tcp }
+    - { port: 80, proto: tcp }
+    - { port: 443, proto: tcp }
+    - { port: 3000, proto: tcp }
+    - { port: 9090, proto: tcp }
+    - { port: 9093, proto: tcp }
+    - { port: 9100, proto: tcp }
+    - { port: 51111, proto: udp }
+
+- name: Turn on ufw
+  ufw:
+    state: enabled
+    logging: no
