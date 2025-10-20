@@ -1,0 +1,11 @@
+---
+ 2 - name: Installation and configuration of monitoring + VPN
+ 3   hosts: monitoring
+ 4   become: yes
+ 5   roles:
+ 6     - wireguard
+ 7     - ufw
+ 8     - prometheus
+ 9     - node_exporter
+10     - alertmanager
+11     - grafana
